@@ -1,4 +1,4 @@
-import InputNumber from './InputNumber'
+import InputNumber from './src/InputNumber'
 
 InputNumber.install = function (Vue) {
   Vue.component(InputNumber.name, InputNumber);

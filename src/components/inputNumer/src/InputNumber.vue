@@ -27,7 +27,6 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
 import Focus from 'element-ui/src/mixins/focus'
 import RepeatClick from 'element-ui/src/directives/repeat-click'
 
@@ -118,19 +117,7 @@ export default {
         return this.userInput
       }
 
-      let currentValue = this.currentValue
-      if (typeof currentValue === 'number' && this.precision !== undefined) {
-        let val = currentValue.toFixed(this.precision)
-        return val.split('.').length > 1
-          ? val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') + '.' + val.split('.')[1]
-          : val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-      } else if (typeof currentValue === 'string' && this.precision !== undefined) {
-        let val = currentValue.replace(/,/g, '')
-        val = this.toPrecision(val, this.precision)
-        return val.split('.').length > 1
-          ? val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') + '.' + val.split('.')[1]
-          : val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
-      }
+      return this.formatValue(this.currentValue, this.precision)
     }
   },
 
@@ -173,6 +160,20 @@ export default {
   },
 
   methods: {
+    formatValue(value, precision) {
+      if (typeof value === 'number' && precision !== undefined) {
+        let val = value.toFixed(precision)
+        return val.split('.').length > 1
+          ? val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') + '.' + val.split('.')[1]
+          : val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      } else if (typeof value === 'string' && precision !== undefined) {
+        let val = value.replace(/,/g, '')
+        val = this.toPrecision(val, precision)
+        return val.split('.').length > 1
+          ? val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,') + '.' + val.split('.')[1]
+          : val.split('.')[0].replace(/(\d)(?=(?:\d{3})+$)/g, '$1,')
+      }
+    },
     toPrecision(num, precision) {
       if (precision === undefined) precision = this.numPrecision
       if (num === '' || num === null || num === undefined) return ''
